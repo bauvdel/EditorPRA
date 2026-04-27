@@ -1,13 +1,23 @@
 # Player Restricted Area Creator for DayZ Editor
 
+<p align="center">
+  <img src="docs/banner.png" alt="PRA Zone Banner" width="1500"/>
+</p>
+
 [![License: CC BY-ND 4.0](https://img.shields.io/badge/License-CC_BY--ND_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nd/4.0/)
+[![Workshop](https://img.shields.io/badge/Steam-Workshop-blue.svg)](https://steamcommunity.com/sharedfiles/filedetails/?id=xxx)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black.svg)](https://github.com/bauvdel/EditorPRA)
 
 > Create, import, and export fully functional Player Restricted Areas (PRA Zones) with Safe Positions right inside of DayZ Editor!
 
 ---
+##  Screenshots
 
-## ✨ Features
+| PRA Zone Box | 3D Safe Position | 2D Safe Position | Vertex Position | Editor Example | Sakhal Example |
+|-----------------------|----------------------|------------------------|----------------------|----------------------|------------------------------|
+| [<img src="docs/screenshot1.png" width="250"/>](docs/screenshot1.png) | [<img src="docs/screenshot2.png" width="250"/>](docs/screenshot2.png) | [<img src="docs/screenshot3.png" width="250"/>](docs/screenshot3.png) | [<img src="docs/screenshot4.png" width="250"/>](docs/screenshot4.png) | [<img src="docs/screenshot5.png" width="250"/>](docs/screenshot5.png) | [<img src="docs/screenshot6.png" width="250"/>](docs/screenshot6.png) |
+
+##  Features
 
 - Create and configure **working PRA Zones** directly in DayZ Editor
 - Define **3D boxes** with independent X, Y, and Z sizing
@@ -20,7 +30,7 @@
 
 ---
 
-## ⚙️ Requirements
+##  Requirements
 
 - [Dabs Framework](https://steamcommunity.com/sharedfiles/filedetails/?id=2545327648)
 - [DayZ Editor](https://steamcommunity.com/sharedfiles/filedetails/?id=2250764298)
@@ -29,7 +39,7 @@
 
 ---
 
-## 🛠 Installation
+##  Installation
 
 **Manual**
 1. Clone or download this repository
@@ -39,9 +49,9 @@
 
 ---
 
-## ❔ What Are Player Restricted Areas?
+##  What Are Player Restricted Areas?
 
-Player Restricted Areas (PRA) are **server-side security zones** that prevent players from spawning or remaining in restricted locations. They automatically teleport players to safe positions when violations are detected.
+Player Restricted Areas (PRA) are **server-side security zones** that prevent players from spawning in restricted locations. They automatically teleport players to safe positions when a character is loaded inside a restricted area (i.e., on login or respawn).
 
 ### How PRA Works
 
@@ -70,7 +80,7 @@ Player is teleported to that safe position
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ### Placing PRA Boxes (3D Restricted Volumes)
 
@@ -162,7 +172,7 @@ All PRA objects in your editor scene must have the **same Area Group Name**:
 
 ---
 
-## 📂 Export Format
+##  Export Format
 
 Files are exported to the default **DayZ Editor** files directory.
 
@@ -200,7 +210,7 @@ Files are exported to the default **DayZ Editor** files directory.
 
 > **NOTE:** Each exported file contains **one area**. If you have multiple area groups in your editor scene, each will be exported to a separate JSON file.
 
-## 🎯 PRA Object Types Reference
+##  PRA Object Types Reference
 
 ### PRABoxObject
 - **Purpose:** Define 3D rectangular restricted volumes
@@ -229,7 +239,7 @@ Files are exported to the default **DayZ Editor** files directory.
 
 ---
 
-## 🚀 Server Deployment
+##  Server Deployment
 
 After exporting your PRA configuration from the editor, you need to deploy it to your DayZ server.
 
@@ -239,38 +249,17 @@ Exported PRA files are saved to your **DayZ Editor files directory**:
 - Default location: `<DayZ Profile>\Editor\<filename>.json`
 - Example: `C:\Users\YourName\Documents\DayZ\Editor\warheadstorage.json`
 
-### Step 2: Choose Deployment Method
+### Step 2: Copy Your File to the Mission Folder
 
-You have **two options** for deploying PRA files to your server:
+Copy your exported JSON file to a `pra/` subfolder inside your mission:
+```
+mpmissions/<your_mission>/pra/<filename>.json
+```
+Example: `mpmissions/dayzOffline.sakhal/pra/warheadstorage.json`
 
-#### Option A: Mission Folder (Recommended for Custom Areas)
+### Step 3: Configure CfgGameplayFile
 
-**Best for:** Custom PRA areas specific to your mission
-
-1. Copy your exported JSON file to your mission's PRA folder:
-   ```
-   mpmissions/<your_mission>/pra/<filename>.json
-   ```
-   Example: `mpmissions/dayzOffline.sakhal/pra/warheadstorage.json`
-
-2. Enable **CfgGameplayFile** in your server configuration
-3. Add your file to the **cfggameplay.json** configuration
-
-#### Option B: World Folder (Recommended for Map-Wide Areas)
-
-**Best for:** Default PRA areas that apply to all missions on a map
-
-1. Copy your exported JSON file to the world's PRA folder:
-   ```
-   dz/worlds/<worldname>/ce/pra/<filename>.json
-   ```
-   Example: `dz/worlds/sakhal/ce/pra/warheadstorage.json`
-
-2. These load automatically without additional configuration
-
-### Step 3: Configure CfgGameplayFile (Mission Folder Method)
-
-If using **Option A** (mission folder), you must enable and configure the gameplay file system.
+You must enable the gameplay file system and register your PRA file in it.
 
 #### 3.1: Enable in Server Config
 
@@ -281,19 +270,22 @@ enableCfgGameplayFile = 1;
 
 #### 3.2: Create cfggameplay.json
 
-Create or edit `mpmissions/<your_mission>/cfggameplay.json`:
+Create or edit `mpmissions/<your_mission>/cfggameplay.json`. The `playerRestrictedAreaFiles` array must be inside the `WorldsData` object:
 
 ```json
 {
-  "playerRestrictedAreaFiles": [
-    "pra/warheadstorage.json",
-    "pra/militarybase.json",
-    "pra/restrictedzone.json"
-  ]
+  "WorldsData": {
+    "playerRestrictedAreaFiles": [
+      "pra/warheadstorage.json",
+      "pra/militarybase.json",
+      "pra/restrictedzone.json"
+    ]
+  }
 }
 ```
 
 **Key points:**
+- `playerRestrictedAreaFiles` must be inside `"WorldsData": { ... }`
 - Use **forward slashes** (`pra/file.json`, not `pra\file.json`)
 - Paths are **relative to mission folder**
 - File paths are **case-sensitive** on Linux servers
@@ -303,30 +295,33 @@ Create or edit `mpmissions/<your_mission>/cfggameplay.json`:
 
 Restart your DayZ server to load the new PRA configurations.
 
-### Loading Priority
+### How DayZ Loads PRA Files
 
-DayZ checks for PRA files in this order:
+DayZ resolves PRA files in two stages:
 
-1. **CfgGameplayFile enabled?**
-   - ✅ Yes → Load from `cfggameplay.json` `playerRestrictedAreaFiles` array
-   - ❌ No → Load from world defaults
+1. **Get the file list:**
+   - ✅ `enableCfgGameplayFile = 1` → uses the `WorldsData.playerRestrictedAreaFiles` array from `cfggameplay.json`
+   - ❌ Not enabled → uses the map's hardcoded built-in defaults (e.g., Sakhal's warhead storage)
 
-2. **File location search order:**
-   - First check: `$mission:pra/<filename>.json` (mission folder)
-   - Fallback: `dz/worlds/<worldname>/ce/pra/<filename>.json` (world folder)
+2. **For each filename in the list, search in order:**
+   - First: `$mission:<filename>` (your mission folder)
+   - Fallback: `dz/worlds/<worldname>/ce/<filename>` (world/mod folder)
+
+> **NOTE:** The world folder is only a fallback for files already listed in cfggameplay.json. You cannot auto-load a PRA file by placing it in the world folder alone — it must be listed first.
 
 ### Verification
 
-Check your server logs on startup for messages like:
-```
-[PRA] Loading player restricted area: pra/warheadstorage.json
-[PRA] Successfully loaded area: RestrictedAreaWarheadStorage
-```
+If a PRA file fails to load, the server RPT log will contain an error from the JSON loader (e.g., invalid JSON, file not found). Common validation errors logged to RPT:
 
-If you see errors, verify:
+- `No valid coordinates in 'PRABoxes' or 'PRAPolygons' for area: <name>`
+- `Undefined safe positions for area: <name>`
+- `Invalid box defined in <name>. Box needs to have sizes, rotation, and position defined!`
+
+If PRA zones are not working, verify:
 - ✅ JSON syntax is valid
 - ✅ File paths are correct (case-sensitive on Linux)
-- ✅ `enableCfgGameplayFile = 1` in serverDZ.cfg (if using mission folder)
+- ✅ `enableCfgGameplayFile = 1` in serverDZ.cfg
+- ✅ `playerRestrictedAreaFiles` is nested inside `WorldsData` in `cfggameplay.json`
 - ✅ File paths in `cfggameplay.json` match actual files
 
 ### Example: Complete Setup
@@ -339,10 +334,12 @@ enableCfgGameplayFile = 1;
 **Gameplay Config** (`mpmissions/dayzOffline.sakhal/cfggameplay.json`):
 ```json
 {
-  "playerRestrictedAreaFiles": [
-    "pra/warheadstorage.json",
-    "pra/militarybase.json"
-  ]
+  "WorldsData": {
+    "playerRestrictedAreaFiles": [
+      "pra/warheadstorage.json",
+      "pra/militarybase.json"
+    ]
+  }
 }
 ```
 
@@ -359,16 +356,16 @@ mpmissions/
 ### Testing Your PRA
 
 1. Start your server with the PRA configuration
-2. Join the server and teleport to the restricted area location
-3. Relog (respawn your character)
-4. If inside a PRA zone, you should be teleported to a safe position
-5. Check admin logs for teleportation events
+2. Join the server and move your character into the restricted area location
+3. Log out, then log back in
+4. If inside a PRA zone when you log in, you will be teleported to a safe position
+5. Check RPT logs for any PRA loading errors
 
 > **TIP:** Use DayZ Diag menu (`Left Alt + N`) in local testing to visualize PRA zones before deploying to server
 
 ---
 
-## 🐛 Help and Support
+##  Help and Support
 
 We both have full-time jobs, but we will do our best to keep this updated and fix bugs as they happen. Please find us on Discord or create an issue on GitHub!
 
@@ -376,7 +373,7 @@ We both have full-time jobs, but we will do our best to keep this updated and fi
 
 ---
 
-## 🐐 Credits
+##  Credits
 
 - Thank you to **@inclementdab** for creating DayZ Editor ❤️!
   [DayZ Editor on Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2250764298)
@@ -386,7 +383,7 @@ We both have full-time jobs, but we will do our best to keep this updated and fi
 
 ---
 
-## 📜 License
+##  License
 
 [CC BY-ND 4.0](LICENSE) — Free to use, modify, and share non-commercially.
 
@@ -394,7 +391,7 @@ We both have full-time jobs, but we will do our best to keep this updated and fi
 
 ---
 
-## 🍺 Donate
+##  Donate
 
 We created this project as we felt that there was a need for such a tool to curb the barrier to entry for a task like this. This was made in our spare time, and we plan to continue to support and update this tool as DayZ and DayZ Editor grow and change. If you would like to support the project, or just want to say thanks, feel free to click the links below!
 
@@ -403,4 +400,4 @@ We created this project as we felt that there was a need for such a tool to curb
 
 ---
 
-**Happy PRA Zone Creating!** 🎮
+**Happy PRA Zone Creating!**
