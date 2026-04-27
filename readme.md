@@ -5,7 +5,7 @@
 </p>
 
 [![License: CC BY-ND 4.0](https://img.shields.io/badge/License-CC_BY--ND_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nd/4.0/)
-[![Workshop](https://img.shields.io/badge/Steam-Workshop-blue.svg)](https://steamcommunity.com/sharedfiles/filedetails/?id=xxx)
+[![Workshop](https://img.shields.io/badge/Steam-Workshop-blue.svg)](https://steamcommunity.com/sharedfiles/filedetails/?id=3715330422)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black.svg)](https://github.com/bauvdel/EditorPRA)
 
 > Create, import, and export fully functional Player Restricted Areas (PRA Zones) with Safe Positions right inside of DayZ Editor!
