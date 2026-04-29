@@ -361,8 +361,6 @@ mpmissions/
 4. If inside a PRA zone when you log in, you will be teleported to a safe position
 5. Check RPT logs for any PRA loading errors
 
-> **TIP:** Use DayZ Diag menu (`Left Alt + N`) in local testing to visualize PRA zones before deploying to server
-
 ---
 
 ##  Help and Support
