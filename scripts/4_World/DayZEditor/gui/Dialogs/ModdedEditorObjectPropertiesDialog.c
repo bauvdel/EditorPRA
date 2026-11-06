@@ -1,4 +1,4 @@
-modded class EditorObjectPropertiesDialog : EditorDialogBase
+modded class EditorObjectPropertiesDialog
 {
 	protected ref PRABoxController m_PRAController;
 	protected ref PRASafePosition3DController m_PRASafe3DController;
