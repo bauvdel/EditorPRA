@@ -1,15 +1,16 @@
 modded class EditorObject
 {
-    //Remove bounding box for PRA objects
-    override void ShowBoundingBox()
+    // Remove bounding box for PRA boxes.
+    // DayZ Editor (1.30 update) replaced ShowBoundingBox() with
+    // SetBoundingBoxVisibility(bool): the box is now drawn every frame in
+    // OnFrame() while m_BoundingBoxVisible is true. Forcing it off here keeps
+    // PRA boxes free of the editor's box on select/show.
+    override void SetBoundingBoxVisibility(bool state)
     {
-        Object w = GetWorldObject();
-
-        // Hide bounding box for PRA boxes
-        if (PRABoxObject.Cast(w)) {
-            return;
+        if (state && PRABoxObject.Cast(GetWorldObject()))
+        {
+            state = false;
         }
-
-        super.ShowBoundingBox();
+        super.SetBoundingBoxVisibility(state);
     }
 }
